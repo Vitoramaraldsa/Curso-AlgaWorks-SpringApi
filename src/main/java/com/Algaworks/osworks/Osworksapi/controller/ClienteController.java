@@ -6,6 +6,7 @@
 package com.Algaworks.osworks.Osworksapi.controller;
 import com.Algaworks.osworks.Osworksapi.domain.model.Cliente;
 import com.Algaworks.osworks.Osworksapi.domain.repository.ClienteRepository;
+import com.Algaworks.osworks.Osworksapi.domain.service.SaveClienteService;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -34,6 +35,9 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
     
+    @Autowired
+    private SaveClienteService saveService;
+    
     @GetMapping
     public List<Cliente> listar(){
         return clienteRepository.findAll();
@@ -53,7 +57,7 @@ public class ClienteController {
    @PostMapping
    @ResponseStatus(HttpStatus.CREATED)
    public Cliente adicionar(@Valid @RequestBody Cliente cliente){
-       return clienteRepository.save(cliente);
+       return saveService.save(cliente);
    }
    
    @PutMapping("/{clienteId}")
@@ -63,7 +67,7 @@ public class ClienteController {
        }else{
             
             cliente.setId(clienteId);
-            cliente = clienteRepository.save(cliente);
+            cliente = saveService.save(cliente);
             
             return ResponseEntity.ok(cliente);
        }
@@ -75,7 +79,7 @@ public class ClienteController {
        if(!clienteRepository.existsById(clienteId)){
            return ResponseEntity.notFound().build();
          }else{
-           clienteRepository.deleteById(clienteId);
+           saveService.delete(clienteId);
            return ResponseEntity.noContent().build();
          }
        

@@ -22,4 +22,6 @@ public interface ClienteRepository extends JpaRepository<Cliente , Long>{
     
     // Pesquisa pela igualdade de caracteres
     List<Cliente> findByNomeContaining(String nome);
+    
+    Cliente findByEmail(String email);
 }
